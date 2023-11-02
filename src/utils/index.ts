@@ -1,1 +1,1 @@
-export { getWeather } from './api';
+export { getWeather, OpenWeatherData } from './api'
