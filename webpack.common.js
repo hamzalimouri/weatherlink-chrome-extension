@@ -2,6 +2,9 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { web } = require('webpack');
+const webpack = require('webpack');
+const dotenv = require('dotenv').config({ path: __dirname + '/.env' })
 
 module.exports = {
   entry: {
@@ -23,9 +26,9 @@ module.exports = {
       },
       {
         test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,
-        type: 'asset/resource'
-      }
-    ]
+        type: 'asset/resource',
+      },
+    ],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -39,13 +42,13 @@ module.exports = {
         {
           from: path.resolve('src/static'),
           to: path.resolve('dist'),
-        }
-      ]
+        },
+      ],
     }),
-    ...getHtmlPlugins([
-      'popup',
-      'options'
-    ]),
+    ...getHtmlPlugins(['popup', 'options']),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(dotenv.parsed),
+    }),
   ],
   output: {
     filename: '[name].js',
@@ -55,7 +58,7 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
     },
-  }
+  },
 }
 
 function getHtmlPlugins(chunks) {
