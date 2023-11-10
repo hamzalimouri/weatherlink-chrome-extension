@@ -16,15 +16,19 @@ const App: React.FC<{}> = () => {
 
   const [cityInput, setCityInput] = useState<string>('')
 
-  const handleCityButtonClick = () => {
+  const handleAddCityButtonClick = () => {
     if (cityInput === '') return
     setCities([...cities, cityInput])
     setCityInput('')
   }
+
+  const handleCityDeleteButtonClick = (index: number) => {
+    setCities(cities.filter((_, i) => i !== index))
+  }
+
   return (
     <Box p={'4px'}>
       <Paper
-        component='form'
         sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 300 }}
       >
         <InputBase
@@ -32,19 +36,29 @@ const App: React.FC<{}> = () => {
           placeholder='New city'
           value={cityInput}
           onChange={(e) => setCityInput(e.target.value)}
+          onKeyPress={(e) => {
+			console.log(e.key, cityInput)
+            if (e.key === 'Enter') {
+              handleAddCityButtonClick()
+            }
+          }}
         />
         <IconButton
           type='button'
           sx={{ p: '10px' }}
           aria-label='add'
-          onClick={handleCityButtonClick}
+          onClick={handleAddCityButtonClick}
         >
           <AddIcon />
         </IconButton>
       </Paper>
 
       {cities.map((city, index) => (
-        <WeatherCard city={city} key={index} />
+        <WeatherCard
+          city={city}
+          key={index}
+          onDelete={() => handleCityDeleteButtonClick(index)}
+        />
       ))}
     </Box>
   )
