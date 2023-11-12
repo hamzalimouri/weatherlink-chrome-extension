@@ -1,4 +1,5 @@
-// TODO: background script
+import { setStoredCities } from "../utils";
+
 chrome.runtime.onInstalled.addListener(() => {
-  // TODO: on installed function
+  setStoredCities([])
 })
